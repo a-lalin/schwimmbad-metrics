@@ -31,7 +31,7 @@ jobs:
       id: generate
       run: |
         # Run the Python script
-        python log_generator.py
+        python collect-and-update.py
         # Capture exit code to know if changes were made
         echo "exit_code=$?" >> $GITHUB_OUTPUT
     
