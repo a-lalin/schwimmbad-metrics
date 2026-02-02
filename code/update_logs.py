@@ -1,9 +1,9 @@
 # Import necessary libraries
-import os           # For file and directory operations
-import json         # For JSON file reading/writing
-import random       # For generating random numbers
-import sys          # For exit codes
-from datetime import datetime as dt  # For getting current date/time
+import os
+import json
+import random
+import sys
+from datetime import datetime as dt
 
 def collect_data():
     """Simulate data collection by returning a random number between 0 and 100"""
@@ -15,11 +15,15 @@ def main():
     # Get current date and time
     now = dt.now()
     
+    # Get the project root (one level up from the script)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(script_dir)
+    
     # Create directory path using YYYY-MM-DD format
-    log_dir = f"logs/{now.strftime('%Y-%m-%d')}"
+    log_dir = os.path.join(parent_dir, "logs", now.strftime('%Y-%m-%d'))
     
     # Create file path using current hour: HH-00.json
-    log_file = f"{log_dir}/{now.hour:02d}-00.json"
+    log_file = os.path.join(log_dir, f"{now.hour:02d}-00.json")
     
     # Create timestamp for current minute (seconds always set to 00)
     timestamp = now.strftime('%Y-%m-%d %H:%M:00')
