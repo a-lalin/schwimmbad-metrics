@@ -1,0 +1,72 @@
+name: Collect Data and Update Logs
+
+on:
+  schedule:
+    # Run every minute
+    - cron: "*/5 * * * *"
+  
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+
+permissions:
+  contents: write  # Required to push changes back to repo
+
+jobs:
+  generate-and-commit:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        # Fetch all history so we can properly push changes
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+    
+    - name: Run log generator script
+      id: generate
+      run: |
+        # Run the Python script
+        python log_generator.py
+        # Capture exit code to know if changes were made
+        echo "exit_code=$?" >> $GITHUB_OUTPUT
+    
+    - name: Setup Git
+      # Always setup git, but only commit if there are changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+    
+    - name: Check for changes
+      id: check_changes
+      run: |
+        # Check if there are any uncommitted changes in logs directory
+        if git status --porcelain logs/ | grep -q .; then
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+          echo "Changes detected in logs directory"
+        else
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "No changes to commit"
+        fi
+    
+    - name: Commit and push changes
+      if: steps.check_changes.outputs.has_changes == 'true'
+      run: |
+        # Get current UTC time for commit message
+        CURRENT_TIME=$(date -u '+%Y-%m-%d %H:%M')
+        CURRENT_HOUR=$(date -u '+%H')
+        
+        # Add only the logs directory
+        git add logs/
+        
+        # Create descriptive commit message
+        git commit -m "Add log entry for ${CURRENT_TIME}"
+        
+        # Push changes back to repository
+        git push
+        
+        echo "Successfully committed and pushed changes"
