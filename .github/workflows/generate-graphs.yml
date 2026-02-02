@@ -1,12 +1,12 @@
-name: Collect Data
+name: Generate Chart
 
 on:
   schedule:
-    - cron: '*/15 * * * *'  # Runs every 15 minutes
+    - cron: '0 * * * *'  # Runs at the beginning of every hour
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
-  collect:
+  generate:
     runs-on: ubuntu-latest
     
     steps:
@@ -17,13 +17,13 @@ jobs:
       with:
         python-version: '3.10'
     
-    - name: Run data collection
-      run: python code/collect_data.py
+    - name: Generate chart
+      run: python code/generate_graphs.py
       
-    - name: Commit and push if changes
+    - name: Commit and push chart
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add logs/
-        git commit -m "Add data point for $(date -u '+%Y-%m-%d %H:%M')" || echo "No changes to commit"
+        git add graphs/
+        git commit -m "Update chart for $(date -u '+%Y-%m-%d %H')" || echo "No changes to commit"
         git push

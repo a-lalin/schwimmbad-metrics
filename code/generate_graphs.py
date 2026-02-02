@@ -1,10 +1,9 @@
-# Import necessary libraries
 import os
 import json
 from datetime import datetime, timedelta
 import argparse
 
-def generate_chart(output_dir=None):
+def generate_graph_last_hour(output_dir=None):
     """Generate a Mermaid chart showing the last hour's data"""
     
     # Get current time
@@ -13,11 +12,11 @@ def generate_chart(output_dir=None):
     # Calculate previous hour
     previous_hour = now - timedelta(hours=1)
     
-    # Get the project root directory (one level up from code folder)
+    # Get the script's directory and then the parent directory (project root)
     script_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(script_dir)
     
-    # Create paths for previous hour's data in parallel logs folder
+    # Create paths for previous hour's data in the parallel logs folder
     log_dir = os.path.join(parent_dir, "logs", previous_hour.strftime('%Y-%m-%d'))
     log_file = os.path.join(log_dir, f"{previous_hour.hour:02d}-00.json")
     
@@ -106,4 +105,4 @@ if __name__ == "__main__":
     parser.add_argument("--output-dir", "-o", help="Output directory for the graph")
     args = parser.parse_args()
     
-    generate_chart(args.output_dir)
+    generate_graph_last_hour(args.output_dir)

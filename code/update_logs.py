@@ -15,11 +15,11 @@ def main():
     # Get current date and time
     now = dt.now()
     
-    # Get the project root (one level up from the script)
+    # Get the script's directory and then the parent directory (project root)
     script_dir = os.path.dirname(os.path.abspath(__file__))
     parent_dir = os.path.dirname(script_dir)
     
-    # Create directory path using YYYY-MM-DD format
+    # Create directory path using YYYY-MM-DD format in the parallel logs folder
     log_dir = os.path.join(parent_dir, "logs", now.strftime('%Y-%m-%d'))
     
     # Create file path using current hour: HH-00.json
