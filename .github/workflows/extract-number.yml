@@ -3,7 +3,7 @@ name: Extract Number from Twitch Stream
 on:
   schedule:
     # Run every 5 minutes
-    - cron: '*/15 * * * *'
+    - cron: '*/15 * * 1 *'
   workflow_dispatch:  # Allow manual runs
 
 jobs:
