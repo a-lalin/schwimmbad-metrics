@@ -15,7 +15,7 @@ config:
 ---
 xychart-beta
   title "Stadthallenbad"
-  x-axis ["11:40"]
+  x-axis ["13:35"]
   y-axis "People"
-  line [44]
+  line [21]
 ```
