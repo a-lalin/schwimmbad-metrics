@@ -99,3 +99,15 @@ Have ideas for improving this system or want to integrate real data?
 ---
 
 *Note: This project currently uses simulated data. We're actively seeking partnerships with Stadthallenbad or relevant authorities to integrate real occupancy data.*
+
+---
+
+
+Montag*:	08:00 - 21:30 Uhr
+Dienstag*:	06:30 - 21:30 Uhr
+Mittwoch*:	08:00 - 17:30 Uhr
+Donnerstag*:	06:30 - 21:30 Uhr
+Freitag*:	08:00 - 21:30 Uhr
+Samstag*:	07:00 - 21:30 Uhr
+Sonn- & Feiertag:	07:00 - 18:00 Uhr
+*außer Feiertag

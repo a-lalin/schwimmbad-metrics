@@ -2,7 +2,7 @@ name: Generate Graphs
 
 on:
   schedule:
-    - cron: '0 * * * *'  # Runs at the beginning of every hour
+    - cron: '0 6-21 * * *'  # Runs at the beginning of every hour
   workflow_dispatch:  # Allows manual triggering
 
 jobs:
