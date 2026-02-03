@@ -20,10 +20,38 @@ jobs:
     - name: Run data collection
       run: python code/update_logs.py
       
-    - name: Commit and push if changes
+    - name: Setup Git
+      # Always setup git, but only commit if there are changes
       run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+    
+    - name: Check for changes
+      id: check_changes
+      run: |
+        # Check if there are any uncommitted changes in logs directory
+        if git status --porcelain logs/ | grep -q .; then
+          echo "has_changes=true" >> $GITHUB_OUTPUT
+          echo "Changes detected in logs directory"
+        else
+          echo "has_changes=false" >> $GITHUB_OUTPUT
+          echo "No changes to commit"
+        fi
+    
+    - name: Commit and push changes
+      if: steps.check_changes.outputs.has_changes == 'true'
+      run: |
+        # Get current UTC time for commit message
+        CURRENT_TIME=$(date -u '+%Y-%m-%d %H:%M')
+        CURRENT_HOUR=$(date -u '+%H')
+        
+        # Add only the logs directory
         git add logs/
-        git commit -m "Add data point for $(date -u '+%Y-%m-%d %H:%M')" || echo "No changes to commit"
+        
+        # Create descriptive commit message
+        git commit -m "Add log entry for ${CURRENT_TIME}"
+        
+        # Push changes back to repository
         git push
+        
+        echo "Successfully committed and pushed changes"
